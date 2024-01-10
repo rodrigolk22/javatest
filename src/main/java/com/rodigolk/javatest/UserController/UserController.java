@@ -18,7 +18,6 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/save")
-
     public String saveUser(@RequestBody UserSaveDTO userSaveDTO)
     {
         String id = userService.addUser(userSaveDTO);
@@ -28,12 +27,11 @@ public class UserController {
     @GetMapping(path = "/getAllUser")
     public List<UserDTO> getAllUser()
     {
-       List<UserDTO> allUsers = userService.getAllUser();
-       return allUsers;
+       List<UserDTO> allUser = userService.getAllUser();
+       return allUser;
     }
 
     @PutMapping(path = "/update")
-
     public String updateUser(@RequestBody UserUpdateDTO userUpdateDTO)
     {
         String id = userService.updateUser(userUpdateDTO);

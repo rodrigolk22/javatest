@@ -39,6 +39,7 @@ public class UserSaveDTO {
         this.password = password;
     }
 
+    public UserSaveDTO(){}
 
     public UserSaveDTO(String name, int profile_id, String email, String password){
         this.name = name;
@@ -49,7 +50,7 @@ public class UserSaveDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "UserSaveDTO{" +
                 ", name='" + name + '\'' +
                 ", profile_id='" + profile_id + '\'' +
                 ", email=" + email +

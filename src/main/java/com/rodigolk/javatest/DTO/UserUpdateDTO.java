@@ -59,7 +59,7 @@ public class UserUpdateDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "UserUpdateDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", profile_id='" + profile_id + '\'' +
