@@ -15,6 +15,20 @@ import java.util.List;
 public class ProfileServiceIMPL implements ProfileService{
     @Autowired
     private ProfileRepo profileRepo;
+
+    @Override
+    public ProfileDTO getProfile(int id){
+        if (profileRepo.existsById(id)) {
+            Profile profile = profileRepo.getById(id);
+            ProfileDTO profileDTO = new ProfileDTO(
+                   profile.getId(),
+                   profile.getName()
+           );
+           return profileDTO;
+        }
+        System.out.println("Profile id not found");
+        return null;
+    }
  
     @Override
     public String addProfile(ProfileSaveDTO profileSaveDTO)

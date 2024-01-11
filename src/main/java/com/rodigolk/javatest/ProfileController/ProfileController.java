@@ -2,6 +2,7 @@ package com.rodigolk.javatest.ProfileController;
 import com.rodigolk.javatest.DTO.ProfileDTO;
 import com.rodigolk.javatest.DTO.ProfileSaveDTO;
 import com.rodigolk.javatest.DTO.ProfileUpdateDTO;
+import com.rodigolk.javatest.DTO.UserDTO;
 import com.rodigolk.javatest.service.ProfileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,12 @@ public class ProfileController {
     
     @Autowired
     private ProfileService profileService;
+
+    @GetMapping(path = "/{id}")
+    public ProfileDTO getProfile(@PathVariable(value = "id") int id){
+        ProfileDTO profile = profileService.getProfile(id);
+        return profile;
+    }
 
     @PostMapping(path = "/save")
     public String saveProfile(@RequestBody ProfileSaveDTO profileSaveDTO)

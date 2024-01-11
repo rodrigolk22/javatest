@@ -4,8 +4,11 @@ import com.rodigolk.javatest.DTO.UserSaveDTO;
 import com.rodigolk.javatest.DTO.UserUpdateDTO;
 import com.rodigolk.javatest.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -16,6 +19,12 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+
+    @GetMapping(path = "/{id}")
+    public UserDTO getUser(@PathVariable(value = "id") int id){
+        UserDTO user = userService.getUser(id);
+        return user;
+    }
 
     @PostMapping(path = "/save")
     public String saveUser(@RequestBody UserSaveDTO userSaveDTO)
@@ -29,6 +38,20 @@ public class UserController {
     {
        List<UserDTO> allUser = userService.getAllUser();
        return allUser;
+    }
+
+    @GetMapping(path = "/findAllUserByName", params = { "name", "page", "size" })
+    public List<UserDTO> findAllUserByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size)
+    {
+       List<UserDTO> allUserByName = userService.findAllUserByName(name, page, size);
+       return allUserByName;
+    }
+
+    @GetMapping(path = "/findAllUserByEmail", params = { "email", "page", "size" })
+    public List<UserDTO> findAllUserByEmail(@RequestParam("email") String email, @RequestParam("page") int page, @RequestParam("size") int size)
+    {
+       List<UserDTO> allUserByEmail = userService.findAllUserByEmail(email, page, size);
+       return allUserByEmail;
     }
 
     @PutMapping(path = "/update")
