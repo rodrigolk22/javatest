@@ -3,12 +3,8 @@ import com.rodigolk.javatest.DTO.UserDTO;
 import com.rodigolk.javatest.DTO.UserSaveDTO;
 import com.rodigolk.javatest.DTO.UserUpdateDTO;
 import com.rodigolk.javatest.service.UserService;
-
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -64,7 +60,7 @@ public class UserController {
     @DeleteMapping(path = "/deleteUser/{id}")
     public String deleteUser(@PathVariable(value = "id") int id)
     {
-        boolean deleteuser = userService.deleteUser(id);
+        userService.deleteUser(id);
         return "deleted";
     }
 }

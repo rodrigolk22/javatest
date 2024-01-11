@@ -24,7 +24,7 @@ public class UserServiceIMPL implements UserService{
 
     public UserDTO getUser(int id){
         if (userRepo.existsById(id)) {
-            User user = userRepo.getById(id);
+            User user = userRepo.getReferenceById(id);
             UserDTO userDTO = new UserDTO(
                    user.getId(),
                    user.getName(),
@@ -117,7 +117,7 @@ public class UserServiceIMPL implements UserService{
     public String updateUser(UserUpdateDTO userUpdateDTO)
     {
         if (userRepo.existsById(userUpdateDTO.getId())) {
-            User user = userRepo.getById(userUpdateDTO.getId());
+            User user = userRepo.getReferenceById(userUpdateDTO.getId());
  
             user.setName(userUpdateDTO.getName());
             user.setProfile_id(userUpdateDTO.getProfile_id());

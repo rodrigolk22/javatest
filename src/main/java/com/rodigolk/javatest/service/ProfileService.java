@@ -3,7 +3,6 @@ package com.rodigolk.javatest.service;
 import com.rodigolk.javatest.DTO.ProfileDTO;
 import com.rodigolk.javatest.DTO.ProfileSaveDTO;
 import com.rodigolk.javatest.DTO.ProfileUpdateDTO;
-import com.rodigolk.javatest.DTO.UserDTO;
 
 import java.util.List;
 

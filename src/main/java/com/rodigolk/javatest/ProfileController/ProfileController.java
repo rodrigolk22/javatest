@@ -2,7 +2,6 @@ package com.rodigolk.javatest.ProfileController;
 import com.rodigolk.javatest.DTO.ProfileDTO;
 import com.rodigolk.javatest.DTO.ProfileSaveDTO;
 import com.rodigolk.javatest.DTO.ProfileUpdateDTO;
-import com.rodigolk.javatest.DTO.UserDTO;
 import com.rodigolk.javatest.service.ProfileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,7 @@ public class ProfileController {
     @DeleteMapping(path = "/deleteProfile/{id}")
     public String deleteProfile(@PathVariable(value = "id") int id)
     {
-        boolean deleteprofile = profileService.deleteProfile(id);
+        profileService.deleteProfile(id);
         return "deleted";
     }
 }

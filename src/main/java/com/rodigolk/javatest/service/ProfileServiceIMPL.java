@@ -19,7 +19,7 @@ public class ProfileServiceIMPL implements ProfileService{
     @Override
     public ProfileDTO getProfile(int id){
         if (profileRepo.existsById(id)) {
-            Profile profile = profileRepo.getById(id);
+            Profile profile = profileRepo.getReferenceById(id);
             ProfileDTO profileDTO = new ProfileDTO(
                    profile.getId(),
                    profile.getName()
@@ -61,7 +61,7 @@ public class ProfileServiceIMPL implements ProfileService{
     public String updateProfile(ProfileUpdateDTO profileUpdateDTO)
     {
         if (profileRepo.existsById(profileUpdateDTO.getId())) {
-            Profile profile = profileRepo.getById(profileUpdateDTO.getId());
+            Profile profile = profileRepo.getReferenceById(profileUpdateDTO.getId());
  
             profile.setName(profileUpdateDTO.getName());
             profileRepo.save(profile);
