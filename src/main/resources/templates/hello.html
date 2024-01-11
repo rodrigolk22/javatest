@@ -1,13 +1,160 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
         <title>Spring Boot AngularJS</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <title>Spring Boot AngularJS example</title>
+        <script type="text/javascript">
+            var app = angular.module("UserManagement", []);
+ 
+            //Controller Part
+            app.controller("UserController", function($scope, $http) {
+ 
+                $scope.users = [];
+                $scope.userForm = {
+                    id : -1,
+                    name : "",
+                    profile_id : "",
+                    email : "",
+                    password: ""
+                };
+ 
+                //Now load the data from server
+                _refreshUserData();
+ 
+                //HTTP POST/PUT methods for add/edit user 
+                // with the help of id, we are going to find out whether it is put or post operation
+ 
+                $scope.submitUser = function() {
+ 
+                    var method = "";
+                    var url = "";
+                    if ($scope.userForm.id == -1) {
+                        //Id is absent in form data, it is create new user operation
+                        method = "POST";
+                        url = '/api/v1/user/save';
+                    } else {
+                        //Id is present in form data, it is edit user operation
+                        method = "PUT";
+                        url = '/api/v1/user/update';
+                    }
+ 
+                    $http({
+                        method : method,
+                        url : url,
+                        data : angular.toJson($scope.userForm),
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        }
+                    }).then( _success, _error );
+                };
+ 
+                //HTTP DELETE- delete user by Id
+                $scope.deleteUser = function(user) {
+                    $http({
+                        method : 'DELETE',
+                        url : '/api/v1/user/deleteUser/' + user.id
+                    }).then(_success, _error);
+                };
+ 
+             // In case of edit, populate form fields and assign form.id with user id
+                $scope.editUser = function(user) {
+ 
+                    $scope.userForm.name = user.name;
+                    $scope.userForm.email = user.email;
+                    $scope.userForm.profile_id = user.profile_id;
+                    $scope.userForm.password = user.password;
+                    $scope.userForm.id = user.id;
+                };
+ 
+                /* Private Methods */
+                //HTTP GET- get all users collection
+                function _refreshUserData() {
+                    $http({
+                        method : 'GET',
+                        url : 'http://localhost:8084/api/v1/user/getAllUser'
+                    }).then(function successCallback(response) {
+                        $scope.users = response.data;
+                    }, function errorCallback(response) {
+                        console.log(response.statusText);
+                    });
+                }
+ 
+                function _success(response) {
+                    _refreshUserData();
+                    _clearFormData()
+                }
+ 
+                function _error(response) {
+                    console.log(response.statusText);
+                }
+ 
+                //Clear the form
+                function _clearFormData() {
+                    $scope.userForm.id = -1;
+                    $scope.userForm.name = "";
+                    $scope.userForm.profile_id = "";
+                    $scope.userForm.email = "";
+                    $scope.userForm.password = "";
+                };
+            });
+        </script>
     </head>
-    <body>
-        <h1 th:inline="text">User<span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+    <body ng-app="UserManagement" ng-controller="UserController">
+        <h1>User</h1>
+        <form ng-submit="submitUser()">
+            <table>
+     
+                <tr>
+                    <th colspan="2">Add/Edit user</th>
+                </tr>
+                <tr>
+                    <td>User Name</td>
+                    <td><input type="text" ng-model="userForm.name" /></td>
+                </tr>
+                <tr>
+                    <td>Profile</td>
+                    <td><input type="text" ng-model="userForm.profile_id" /></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" ng-model="userForm.email" /></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="text" ng-model="userForm.password" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Submit"
+                        class="blue-button" /></td>
+                </tr>
+            </table>
+        </form>
+        <table>
+            <tr>
+     
+                <th>Name</th>
+                <th>Profile</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Operations</th>
+     
+            </tr>
+     
+            <tr ng-repeat="user in users">
+     
+                <td>{{ user.name }}</td>
+                <td>{{ user.profile_id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.password }}</td>
+     
+                <td><a ng-click="editUser(user)" class="blue-button">Edit</a>
+                    | <a ng-click="deleteUser(user)" class="red-button">Delete</a></td>
+            </tr>
+     
+        </table>
+        <h1 th:inline="text"><span th:remove="tag" sec:authentication="name">Logged user</span></h1>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
-    </body>
 </html>

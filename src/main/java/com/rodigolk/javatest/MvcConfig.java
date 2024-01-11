@@ -1,6 +1,7 @@
 package com.rodigolk.javatest;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,5 +15,14 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/hello").setViewName("hello");
 		registry.addViewController("/login").setViewName("login");
 	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+        //registry.addMapping("/**").allowedOrigins("http://localhost:8084").allowCredentials(true).allowedMethods("GET","POST","PUT","DELETE");
+		registry.addMapping("/**")
+            .allowedOrigins("http://localhost:8084")
+            .allowedMethods("GET","POST","PUT","DELETE")
+            .allowCredentials(false).maxAge(3600);
+    }
 
 }

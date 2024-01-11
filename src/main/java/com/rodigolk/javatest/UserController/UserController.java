@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(allowedHeaders = "*", maxAge = 3600)
 @RequestMapping("api/v1/user")
 public class UserController {
     
