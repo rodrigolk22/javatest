@@ -43,7 +43,7 @@ public class Profile {
 
     @Override
     public String toString() {
-        return "ProfileDTO{" +
+        return "Profile{" +
                 "id=" + id +
                 ", name='" + name + 
                 '}';

@@ -31,7 +31,7 @@ public class ProfileDTO {
     public String toString() {
         return "ProfileDTO{" +
                 "id=" + id +
-                ", name='" + name +
+                ", name='" + name + '\'' +
                 '}';
     }
 

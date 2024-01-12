@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="userApp">
+<head>
+    <title>Detalhes do Usuário</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+    <script src="js/app/app.js"></script>
+</head>
+<body ng-controller="UserController">
+
+    <h1>Detalhes do Usuário</h1>
+
+    <form ng-if="selectedUser && profiles && profiles.length > 0">
+
+        <label>ID: </label>
+        <span>{{selectedUser.id}}</span>
+        <br>
+
+        <label>Nome: </label>
+        <input ng-model="selectedUser.name" required>
+        <br>
+        
+        <label>Email: </label>
+        <input ng-model="selectedUser.email" required>
+        <br>
+
+        <label>Senha: </label>
+        <input type="password" ng-model="selectedUser.password" required>
+        <br>
+
+        <label>Perfil: </label>
+        <select ng-model="selectedUser.selectedProfile" ng-options="profile as profile.name for profile in profiles" required>
+            <option value="" disabled>Selecione um perfil</option>
+            <option ng-repeat="profile in profiles" ng-value="profile" ng-selected="profile.id === selectedUser.selectedProfile.id">{{profile.name}}</option>
+        </select>
+        <br>
+
+        <button ng-click="saveChanges()">Salvar Alterações</button>
+    </form>
+
+    <a th:href="@{/home}">Voltar</a>
+
+</body>
+</html>

@@ -3,7 +3,7 @@ package com.rodigolk.javatest.DTO;
 public class UserSaveDTO {
     
     private String name;
-    private int profile_id;
+    private ProfileDTO profile;
     private String email;
     private String password;
 
@@ -15,12 +15,12 @@ public class UserSaveDTO {
         this.name = name;
     }
 
-    public int getProfile_id() {
-        return this.profile_id;
+    public ProfileDTO getProfile() {
+        return profile;
     }
 
-    public void setProfile_id(int profile_id) {
-        this.profile_id = profile_id;
+    public void setProfile(ProfileDTO profile) {
+        this.profile = profile;
     }
 
     public String getEmail() {
@@ -39,11 +39,10 @@ public class UserSaveDTO {
         this.password = password;
     }
 
-    public UserSaveDTO(){}
 
-    public UserSaveDTO(String name, int profile_id, String email, String password){
+    public UserSaveDTO(String name, ProfileDTO profile, String email, String password){
         this.name = name;
-        this.profile_id = profile_id;
+        this.profile = profile;
         this.email = email;
         this.password = password;
     }
@@ -52,7 +51,7 @@ public class UserSaveDTO {
     public String toString() {
         return "UserSaveDTO{" +
                 ", name='" + name + '\'' +
-                ", profile_id='" + profile_id + '\'' +
+                ", profile='" + profile + '\'' +
                 ", email=" + email +
                 ", password=" + password +
                 '}';

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="userApp">
+<head>
+    <title>Novo Usuário</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+    <script src="js/app/app.js"></script>
+</head>
+<body ng-controller="UserController">
+
+    <h1>Novo Usuário</h1>
+
+    <form>
+        <label>Nome: </label>
+        <input ng-model="newUser.name" required>
+        <br>
+        
+        <label>Email: </label>
+        <input ng-model="newUser.email" required>
+        <br>
+
+        <label>Senha: </label>
+        <input type="password" ng-model="newUser.password" required>
+        <br>
+
+        <label>Perfil: </label>
+        <select ng-model="newUser.selectedProfile" ng-options="profile as profile.name for profile in profiles" required>
+            <option value="" disabled>Selecione um perfil</option>
+        </select>
+        <br>
+
+        <button ng-click="saveNewUser()">Salvar Novo Usuário</button>
+
+        <a th:href="@{/home}">Voltar</a>
+    </form>
+
+</body>
+</html>

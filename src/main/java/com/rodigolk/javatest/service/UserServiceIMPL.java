@@ -5,8 +5,10 @@ import com.rodigolk.javatest.UserRepo.UserRepoPagination;
 import com.rodigolk.javatest.DTO.UserDTO;
 import com.rodigolk.javatest.DTO.UserSaveDTO;
 import com.rodigolk.javatest.DTO.UserUpdateDTO;
+import com.rodigolk.javatest.entity.Profile;
 import com.rodigolk.javatest.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,16 +21,14 @@ public class UserServiceIMPL implements UserService{
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private UserRepoPagination userRepoPagination;
-
-    public UserDTO getUser(int id){
+    public User getUser(int id){
         if (userRepo.existsById(id)) {
             User user = userRepo.getReferenceById(id);
-            UserDTO userDTO = new UserDTO(
+            Profile profile = new Profile(user.getProfile().getId(), user.getProfile().getName());
+            User userDTO = new User(
                    user.getId(),
                    user.getName(),
-                   user.getProfile_id(),
+                   profile,
                    user.getEmail(),
                    user.getPassword()
            );
@@ -39,29 +39,29 @@ public class UserServiceIMPL implements UserService{
     }
  
     @Override
-    public String addUser(UserSaveDTO userSaveDTO)
+    public String addUser(User userSaveDTO)
     {
-        User user = new User(
-                userSaveDTO.getName(),
-                userSaveDTO.getProfile_id(),
+        Profile profile = new Profile(userSaveDTO.getProfile().getId(), userSaveDTO.getProfile().getName());
+        UserDTO userDTO = new UserDTO(
+                0, userSaveDTO.getName(),
+                profile,
                 userSaveDTO.getEmail(),
                 userSaveDTO.getPassword()
         );
-        userRepo.save(user);
-        return user.getName();
+        userRepo.save(userSaveDTO);
+        return userDTO.getName();
     }
  
     @Override
-    public List<UserDTO> getAllUser() {
+    public List<User> getAllUser() {
        List<User> getusers = userRepo.findAll();
-       List<UserDTO> userDTOList = new ArrayList<>();
+       List<User> userDTOList = new ArrayList<>();
        for(User a:getusers)
        {
-            UserDTO userDTO = new UserDTO(
- 
+            User userDTO = new User(
                    a.getId(),
                    a.getName(),
-                   a.getProfile_id(),
+                   a.getProfile(),
                    a.getEmail(),
                    a.getPassword()
            );
@@ -72,45 +72,21 @@ public class UserServiceIMPL implements UserService{
     }
 
     @Override
-    public List<UserDTO> findAllUserByName(String name, int page, int size) {
+    public Page<User> getUserList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<User> getusers = userRepoPagination.findAllUserByName(name, pageable);
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for(User a:getusers)
-        {
-                UserDTO userDTO = new UserDTO(
-    
-                    a.getId(),
-                    a.getName(),
-                    a.getProfile_id(),
-                    a.getEmail(),
-                    a.getPassword()
-            );
-            userDTOList.add(userDTO);
-        }
-    
-        return  userDTOList;
+        return userRepo.findAll(pageable);
     }
 
     @Override
-    public List<UserDTO> findAllUserByEmail(String email, int page, int size) {
+    public Page<User> getUserByName(String name, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<User> getusers = userRepoPagination.findAllUserByEmail(email, pageable);
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for(User a:getusers)
-        {
-                UserDTO userDTO = new UserDTO(
-    
-                    a.getId(),
-                    a.getName(),
-                    a.getProfile_id(),
-                    a.getEmail(),
-                    a.getPassword()
-            );
-            userDTOList.add(userDTO);
-        }
-    
-        return  userDTOList;
+        return userRepo.findUserByName(name, pageable);
+    }
+
+    @Override
+    public Page<User> getUserByEmail(String email, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepo.findUserByEmail(email, pageable);
     }
  
     @Override
@@ -120,7 +96,7 @@ public class UserServiceIMPL implements UserService{
             User user = userRepo.getReferenceById(userUpdateDTO.getId());
  
             user.setName(userUpdateDTO.getName());
-            user.setProfile_id(userUpdateDTO.getProfile_id());
+            user.setProfile(userUpdateDTO.getProfile());
             user.setEmail(userUpdateDTO.getEmail());
             user.setPassword(userUpdateDTO.getPassword());
             userRepo.save(user);

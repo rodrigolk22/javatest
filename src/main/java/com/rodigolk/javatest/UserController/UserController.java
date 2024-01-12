@@ -1,10 +1,14 @@
 package com.rodigolk.javatest.UserController;
 import com.rodigolk.javatest.DTO.UserDTO;
-import com.rodigolk.javatest.DTO.UserSaveDTO;
 import com.rodigolk.javatest.DTO.UserUpdateDTO;
+import com.rodigolk.javatest.entity.Profile;
+import com.rodigolk.javatest.entity.User;
 import com.rodigolk.javatest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.rodigolk.javatest.service.ProfileService;
 
 import java.util.List;
 
@@ -16,38 +20,59 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProfileService profileService;
+
     @GetMapping(path = "/{id}")
-    public UserDTO getUser(@PathVariable(value = "id") int id){
-        UserDTO user = userService.getUser(id);
+    public User getUser(@PathVariable(value = "id") int id){
+        User user = userService.getUser(id);
         return user;
     }
 
     @PostMapping(path = "/save")
-    public String saveUser(@RequestBody UserSaveDTO userSaveDTO)
+    public String saveUser(@RequestBody User userSaveDTO)
     {
-        String id = userService.addUser(userSaveDTO);
-        return id;
+        // Verifique se o perfil já existe pelo nome
+        Profile existingProfile = profileService.getProfileByName(userSaveDTO.getProfileName());
+
+        UserDTO newUser = new UserDTO();
+        newUser.setName(userSaveDTO.getName());
+        newUser.setEmail(userSaveDTO.getEmail());
+        newUser.setPassword(userSaveDTO.getPassword());
+        newUser.setProfile(existingProfile);
+
+        userService.addUser(userSaveDTO);
+        return "{\"message\": \"Saved\"}";
     }
 
     @GetMapping(path = "/getAllUser")
-    public List<UserDTO> getAllUser()
+    public List<User> getAllUser()
     {
-       List<UserDTO> allUser = userService.getAllUser();
+       List<User> allUser = userService.getAllUser();
        return allUser;
     }
 
-    @GetMapping(path = "/findAllUserByName", params = { "name", "page", "size" })
-    public List<UserDTO> findAllUserByName(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size)
-    {
-       List<UserDTO> allUserByName = userService.findAllUserByName(name, page, size);
-       return allUserByName;
+    @GetMapping(path = "/getUserList")
+    public Page<User> getUserList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return userService.getUserList(page, size);
     }
 
-    @GetMapping(path = "/findAllUserByEmail", params = { "email", "page", "size" })
-    public List<UserDTO> findAllUserByEmail(@RequestParam("email") String email, @RequestParam("page") int page, @RequestParam("size") int size)
-    {
-       List<UserDTO> allUserByEmail = userService.findAllUserByEmail(email, page, size);
-       return allUserByEmail;
+    @GetMapping("/getUserByName")
+    public Page<User> getUserByName(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return userService.getUserByName(name, page, size);
+    }
+
+    @GetMapping("/getUserByEmail")
+    public Page<User> getUserByEmail(
+            @RequestParam String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return userService.getUserByEmail(email, page, size);
     }
 
     @PutMapping(path = "/update")
@@ -63,4 +88,5 @@ public class UserController {
         userService.deleteUser(id);
         return "deleted";
     }
+
 }

@@ -1,9 +1,11 @@
 package com.rodigolk.javatest.DTO;
 
+import com.rodigolk.javatest.entity.Profile;
+
 public class UserUpdateDTO {
     private int id;
     private String name;
-    private int profile_id;
+    private Profile profile;
     private String email;
     private String password;
 
@@ -24,12 +26,12 @@ public class UserUpdateDTO {
         this.name = name;
     }
 
-    public int getProfile_id() {
-        return this.profile_id;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setProfile_id(int profile_id) {
-        this.profile_id = profile_id;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public String getEmail() {
@@ -49,10 +51,10 @@ public class UserUpdateDTO {
     }
 
 
-    public UserUpdateDTO(int id, String name, int profile_id, String email, String password){
+    public UserUpdateDTO(int id, String name, Profile profile, String email, String password){
         this.id = id;
         this.name = name;
-        this.profile_id = profile_id;
+        this.profile = profile;
         this.email = email;
         this.password = password;
     }
@@ -62,7 +64,7 @@ public class UserUpdateDTO {
         return "UserUpdateDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", profile_id='" + profile_id + '\'' +
+                ", profile='" + profile + '\'' +
                 ", email=" + email +
                 ", password=" + password +
                 '}';

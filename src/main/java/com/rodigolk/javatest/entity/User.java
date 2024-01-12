@@ -1,4 +1,5 @@
 package com.rodigolk.javatest.entity;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,8 +14,9 @@ public class User {
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "profile_id", length = 50)
-    private int profile_id;
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     @Column(name = "email", length = 250)
     private String email;
@@ -39,12 +41,12 @@ public class User {
         this.name = name;
     }
 
-    public int getProfile_id() {
-        return this.profile_id;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setProfile_id(int profile_id) {
-        this.profile_id = profile_id;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public String getEmail() {
@@ -63,18 +65,21 @@ public class User {
         this.password = password;
     }
 
+    public String getProfileName() {
+        return (profile != null) ? profile.getName() : null;
+    }
 
-    public User(int id, String name, int profile_id, String email, String password){
+    public User(int id, String name, Profile profile, String email, String password){
         this.id = id;
         this.name = name;
-        this.profile_id = profile_id;
+        this.profile = profile;
         this.email = email;
         this.password = password;
     }
 
-    public User(String name, int profile_id, String email, String password){
+    public User(String name, Profile profile, String email, String password){
         this.name = name;
-        this.profile_id = profile_id;
+        this.profile = profile;
         this.email = email;
         this.password = password;
     }
@@ -86,7 +91,7 @@ public class User {
         return "UserDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", profile_id='" + profile_id + '\'' +
+                ", profile='" + profile + '\'' +
                 ", email=" + email +
                 ", password=" + password +
                 '}';

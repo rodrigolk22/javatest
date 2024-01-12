@@ -1,7 +1,6 @@
 package com.rodigolk.javatest.service;
 
 import com.rodigolk.javatest.ProfileRepo.ProfileRepo;
-import com.rodigolk.javatest.DTO.ProfileDTO;
 import com.rodigolk.javatest.DTO.ProfileSaveDTO;
 import com.rodigolk.javatest.DTO.ProfileUpdateDTO;
 import com.rodigolk.javatest.entity.Profile;
@@ -17,10 +16,10 @@ public class ProfileServiceIMPL implements ProfileService{
     private ProfileRepo profileRepo;
 
     @Override
-    public ProfileDTO getProfile(int id){
+    public Profile getProfile(int id){
         if (profileRepo.existsById(id)) {
             Profile profile = profileRepo.getReferenceById(id);
-            ProfileDTO profileDTO = new ProfileDTO(
+            Profile profileDTO = new Profile(
                    profile.getId(),
                    profile.getName()
            );
@@ -41,12 +40,12 @@ public class ProfileServiceIMPL implements ProfileService{
     }
  
     @Override
-    public List<ProfileDTO> getAllProfile() {
+    public List<Profile> getAllProfile() {
        List<Profile> getprofiles = profileRepo.findAll();
-       List<ProfileDTO> profileDTOList = new ArrayList<>();
+       List<Profile> profileDTOList = new ArrayList<>();
        for(Profile a:getprofiles)
        {
-            ProfileDTO profileDTO = new ProfileDTO(
+            Profile profileDTO = new Profile(
  
                    a.getId(),
                    a.getName()
@@ -87,5 +86,10 @@ public class ProfileServiceIMPL implements ProfileService{
         }
  
         return true;
+    }
+
+    @Override
+    public Profile getProfileByName(String name) {
+        return profileRepo.findByName(name);
     }
 }

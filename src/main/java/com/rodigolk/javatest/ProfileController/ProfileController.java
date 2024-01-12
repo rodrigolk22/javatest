@@ -1,5 +1,5 @@
 package com.rodigolk.javatest.ProfileController;
-import com.rodigolk.javatest.DTO.ProfileDTO;
+import com.rodigolk.javatest.entity.Profile;
 import com.rodigolk.javatest.DTO.ProfileSaveDTO;
 import com.rodigolk.javatest.DTO.ProfileUpdateDTO;
 import com.rodigolk.javatest.service.ProfileService;
@@ -18,30 +18,30 @@ public class ProfileController {
     private ProfileService profileService;
 
     @GetMapping(path = "/{id}")
-    public ProfileDTO getProfile(@PathVariable(value = "id") int id){
-        ProfileDTO profile = profileService.getProfile(id);
+    public  Profile getProfile(@PathVariable(value = "id") int id){
+        Profile profile = profileService.getProfile(id);
         return profile;
     }
 
     @PostMapping(path = "/save")
     public String saveProfile(@RequestBody ProfileSaveDTO profileSaveDTO)
     {
-        String id = profileService.addProfile(profileSaveDTO);
-        return id;
+        profileService.addProfile(profileSaveDTO);
+        return "{\"message\": \"Saved\"}";
     }
 
     @GetMapping(path = "/getAllProfile")
-    public List<ProfileDTO> getAllProfile()
+    public List<Profile> getAllProfile()
     {
-       List<ProfileDTO> allProfiles = profileService.getAllProfile();
+       List<Profile> allProfiles = profileService.getAllProfile();
        return allProfiles;
     }
 
     @PutMapping(path = "/update")
     public String updateProfile(@RequestBody ProfileUpdateDTO profileUpdateDTO)
     {
-        String id = profileService.updateProfile(profileUpdateDTO);
-        return id;
+        profileService.updateProfile(profileUpdateDTO);
+        return "{\"message\": \"Updated\"}";
     }
 
     @DeleteMapping(path = "/deleteProfile/{id}")

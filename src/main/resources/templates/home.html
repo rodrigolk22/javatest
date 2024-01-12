@@ -1,11 +1,126 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Spring Boot AngularJS</title>
-    </head>
-    <body>
-        <h1>User</h1>
+<html ng-app="userApp">
+<head>
+    <title>Lista de Usuários</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+    <script src="js/app/app.js"></script>
+    
+    <!-- Adicione os links para o Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+</head>
+<body ng-controller="UserController">
+    <div class="container">
+        <div class="float-right">
+            <h1 th:inline="text"><span th:remove="tag" sec:authentication="name">Logged user</span></h1>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-danger" value="Sign Out"/>
+            </form>
+        </div>
+        <div class="container">
+            <h1>Usuário</h1>
         
-        <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
-    </body>
+            <form class="form-horizontal">
+                <input type="hidden" ng-model="selectedUser.id" ng-if="isEditMode">
+        
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Nome:</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" ng-model="newUser.name" required>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email:</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" ng-model="newUser.email" required>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Senha:</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" ng-model="newUser.password" required>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Perfil:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" ng-model="newUser.selectedProfile" ng-options="profile as profile.name for profile in profiles" required>
+                            <option value="" disabled>Selecione um perfil</option>
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary" ng-click="saveNewUser()">Salvar/Editar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+
+        <h1>Lista de Usuários</h1>
+
+        <label>Nome: <input ng-model="filter.name"></label>
+        <label>Email: <input ng-model="filter.email"></label>
+        <button ng-click="submitSearch()">Pesquisar</button>
+        <button ng-click="clearFilter()">Limpar Filtro</button>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Senha</th>
+                    <th>Perfil</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in users">
+                    <td>{{user.id}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.profile.id}}</td>
+                    <td>
+                        <button class="btn btn-info" ng-click="editUser(user.id)">Editar</button>
+                        <button class="btn btn-danger" ng-click="deleteUser(user.id)">Excluir</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <button class="btn btn-default" ng-disabled="currentPage === 0" ng-click="prevPage()">Anterior</button>
+            {{currentPage + 1}}/{{numberOfPages}}
+            <button class="btn btn-default" ng-disabled="currentPage >= numberOfPages - 1" ng-click="nextPage()">Próxima</button>
+        </div>
+
+        <h1>Lista de Perfis</h1>
+
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="profile in profiles">
+                {{profile.name}}
+            </li>
+        </ul>
+
+        <h2>Novo Perfil</h2>
+        <form ng-submit="createProfile()">
+            <div class="form-group">
+                <label>Nome do Perfil:</label>
+                <input class="form-control" ng-model="newProfile.name" required>
+            </div>
+            <button type="submit" class="btn btn-success">Criar Perfil</button>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
 </html>
