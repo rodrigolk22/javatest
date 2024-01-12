@@ -1,9 +1,7 @@
 package com.rodigolk.javatest.service;
 
 import com.rodigolk.javatest.UserRepo.UserRepo;
-import com.rodigolk.javatest.UserRepo.UserRepoPagination;
 import com.rodigolk.javatest.DTO.UserDTO;
-import com.rodigolk.javatest.DTO.UserSaveDTO;
 import com.rodigolk.javatest.DTO.UserUpdateDTO;
 import com.rodigolk.javatest.entity.Profile;
 import com.rodigolk.javatest.entity.User;
