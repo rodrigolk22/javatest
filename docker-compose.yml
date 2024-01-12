@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  # Serviço para o banco de dados
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=user
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+
+  # Serviço para a aplicação Java
+  app:
+    build: .
+    ports:
+      - "8084:8084"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=dbc:mysql://localhost:3306/user?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+
+  # Adicione outros serviços conforme necessário
+
+networks:
+  default:
+    driver: bridge
