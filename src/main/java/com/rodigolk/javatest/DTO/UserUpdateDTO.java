@@ -50,6 +50,8 @@ public class UserUpdateDTO {
         this.password = password;
     }
 
+    public UserUpdateDTO(){}
+
 
     public UserUpdateDTO(int id, String name, Profile profile, String email, String password){
         this.id = id;

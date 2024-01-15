@@ -39,6 +39,9 @@
 
 :white_check_mark: Run using VSCode
 
+:white_check_mark: In a browser run this address: http://localhost:8084/login
+
+:white_check_mark: To test, enter a username with "user" and password "password". without quotes.
 
 ## Languages, dependencies and libs used :books:
 
